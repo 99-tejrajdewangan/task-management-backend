@@ -8,10 +8,27 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', // allow your React dev server
-  credentials: true
-}));
+
+// ✅ Allow multiple frontend origins (local + deployed)
+const allowedOrigins = [
+  'http://localhost:5000',
+  'http://localhost:5173',
+  'https://task-management-frontend-olive-nine.vercel.app' // your Vercel frontend
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman, curl)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error('CORS policy: Origin not allowed'), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
@@ -23,9 +40,11 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGO_URI)
-  .then(()=> {
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
     console.log('MongoDB connected');
-    app.listen(PORT, ()=> console.log(`Server running on ${PORT}`));
+    app.listen(PORT, () => console.log(`Server running on ${PORT}`));
   })
-  .catch(err => console.error('Mongo connect error', err));
+  .catch((err) => console.error('Mongo connect error', err));
+
