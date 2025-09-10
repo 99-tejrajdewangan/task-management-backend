@@ -40,7 +40,7 @@ backend/
 
 ### 1. Clone repo
 ```bash
-git clone https://github.com/your-username/task-manager-backend.git
+git clone https://github.com/99-tejrajdewangan/task-management-backend
 cd task-manager-backend
 
 2. Install dependencies
@@ -50,8 +50,8 @@ npm install
 
 Create .env file from .env.example:
 
-MONGO_URI=your_mongodb_atlas_connection
-JWT_SECRET=your_jwt_secret
+MONGO_URI=mongodb+srv://tejrajdewangan99_db_user:Aygd0TgRuogblgHL@taskdb.zlqrdii.mongodb.net/?retryWrites=true&w=majority&appName=taskdb
+JWT_SECRET=verysecuresecret_here
 PORT=5000
 
 4. Run server
